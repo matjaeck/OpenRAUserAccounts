@@ -39,7 +39,7 @@ class core
 	public function get_info_sql($fingerprint)
 	{
 		$sql_array = array(
-			'SELECT' => 'pubkey.item_id, pubkey.user_id, pubkey.public_key, pubkey.fingerprint, pubkey.revoked, user.username',
+			'SELECT' => 'pubkey.item_id, pubkey.user_id, pubkey.public_key, pubkey.fingerprint, pubkey.revoked, user.username, user.user_avatar, user.user_avatar_type',
 
 			'FROM' => array(
 				USERS_TABLE => 'user',
@@ -180,5 +180,37 @@ class core
 		$this->db->sql_freeresult($result);
 
 		return true;
+	}
+
+	/**
+	 * Returns the source url of user profile images (avatars)
+	 * @param string $avatar_info filename or e-mail address
+	 * @param string $avatar_type 
+	 * 
+	 * @return string
+	 */
+	public function get_avatar_url($avatar_info, $avatar_type)
+	{
+		$url = '';
+		
+		switch($avatar_type)
+		{
+			case 'avatar.driver.upload':
+			{
+				$url = generate_board_url() . 'download/file.php' . '?avatar=' . $avatar_info;
+				return $url;
+			}
+
+			case 'avatar.driver.gravatar':
+			{
+				$url = 'https://secure.gravatar.com/avatar/' . md5(strtolower(trim($avatar_info)));
+				return $url;
+			}
+
+			default:
+			{
+				return $url;
+			}
+		}
 	}
 }

@@ -103,6 +103,7 @@ class main
 						$i++;
 					}
 				}
+				$yaml .= "\tAvatarUrl: " . $this->core->get_avatar_url($data['user_avatar'], $data['user_avatar_type']) . "\n";
 
 				return $this->get_response($yaml);
 
